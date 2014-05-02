@@ -1,9 +1,6 @@
 # Cookbook Name:: tomcat
 # Recipe:: _ark
 #
-
-tomcat_service = "tomcat#{node[:tomcat][:version]}"
-
 include_recipe 'ark'
 
 # Create Tomcat group
@@ -55,7 +52,7 @@ template "#{node[:tomcat][:conf_dir]}/server.xml" do
     :http_uri_encoding => node[:tomcat][:http_uri_encoding],
     :tomcat_version => node[:tomcat][:version].to_i
   )
-  notifies :restart, "service[#{tomcat_service}]"
+  notifies :restart, "service[#{node[:tomcat][:service]}]"
 end
 
 # Create Tomcat PID directory
@@ -66,26 +63,26 @@ directory node[:tomcat][:pid_dir] do
 end
 
 # Tomcat init script
-template tomcat_service do
-  path "/etc/init.d/#{tomcat_service}"
+template node[:tomcat][:service] do
+  path "/etc/init.d/#{node[:tomcat][:service]}"
   source 'tomcat-init.erb'
   mode 00774
   variables(
-    :tomcat_service => tomcat_service,
+    :tomcat_service => node[:tomcat][:service],
     :tomcat_user => node[:tomcat][:user],
     :catalina_base => node[:tomcat][:base_dir],
     :catalina_home => node[:tomcat][:home_dir],
     :catalina_opts => node[:tomcat][:catalina_opts],
-    :catalina_pid => node[:tomcat][:pid_dir] + '/' + tomcat_service,
+    :catalina_pid => node[:tomcat][:pid_dir] + '/' + node[:tomcat][:service],
     :catalina_tmp => node[:tomcat][:tmp_dir],
     :java_home => node[:java][:java_home],
     :java_opts => node[:tomcat][:java_opts],
-    :tomcat_lock => node[:tomcat][:lock_dir] + '/' + tomcat_service
+    :tomcat_lock => node[:tomcat][:lock_dir] + '/' + node[:tomcat][:service]
   )
 end
 
 # Tomcat service
-service tomcat_service do
+service node[:tomcat][:service] do
   supports :restart => true, :reload => true, :status => true
   action [:enable, :start]
   retries 2
