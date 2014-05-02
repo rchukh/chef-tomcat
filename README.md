@@ -85,6 +85,7 @@ Performs the bulk of the Tomcat installation.
 ## License & Authors
 
   - Author:: Todd Michael Bushnell (<toddmichael@gmail.com>)
+  - Author:: Roman Chukh (<roman.chukh@gmail.com>)
 
 ```text
 Licensed under the Apache License, Version 2.0 (the "License");
