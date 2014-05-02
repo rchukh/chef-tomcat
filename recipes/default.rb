@@ -11,3 +11,4 @@ include_recipe 'java'
 
 # Only support Ark driven binary tarball install presently
 include_recipe 'tomcat::_ark'
+include_recipe 'tomcat::users'

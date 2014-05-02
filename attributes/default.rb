@@ -2,6 +2,7 @@
 default[:tomcat][:user] = 'tomcat'
 default[:tomcat][:group] = 'tomcat'
 default[:tomcat][:version] = '7'
+default[:tomcat][:service] = "tomcat#{node[:tomcat][:version]}"
 
 # Directories and files
 default[:tomcat][:prefix_dir] = '/usr/local'

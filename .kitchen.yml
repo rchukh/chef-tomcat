@@ -4,28 +4,22 @@ driver_config:
   require_chef_omnibus: "latest"
 
 platforms:
-- name: centos-6.4_chef-11.4.4
-  driver_config: 
-    box: opscode-centos-6.4_chef-11.4.4
-    box_url:  https://opscode-vm.s3.amazonaws.com/vagrant/opscode_centos-6.4_chef-11.4.4.box
-
-- name: ubuntu-12.04_chef-11.4.4
-  driver_config:
-    box: opscode-ubuntu-12.04_chef-11.4.4
-    box_url: https://opscode-vm.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_chef-11.4.4.box
+- name: centos-6.5
 
 suites:
-- name: default
-  run_list:
-    - recipe[tomcat]
-  attributes: {}
+  - name: default
+    run_list:
+      - recipe[tomcat]
+    attributes:
+    data_bags_path: "test/integration/default/data_bags"
 
-- name: tomcat55
-  run_list:
-    - recipe[tomcat]
-  attributes: {
-    tomcat: { version: '55' }
-  }
+  - name: tomcat55
+    run_list:
+      - recipe[tomcat]
+    attributes: {
+      tomcat: { version: '55' }
+    }
+    data_bags_path: "test/integration/default/data_bags"
 
 clusters:
   default:
