@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-template "#{node[:tomcat][:conf_dir]}/tomcat-users.xml" do
+template "#{node[:tomcat][:config_dir]}/tomcat-users.xml" do
   source 'tomcat-users.xml.erb'
   owner node[:tomcat][:user]
   group node[:tomcat][:group]

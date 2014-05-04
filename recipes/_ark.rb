@@ -13,7 +13,7 @@ end
 user node[:tomcat][:user] do
   action :create
   comment "Tomcat application server"
-  home node[:tomcat][:home_dir]
+  home node[:tomcat][:home]
   gid node[:tomcat][:group]
   system true
 end
@@ -22,36 +22,24 @@ end
 ark 'tomcat' do
   url node[:tomcat][:url]
   checksum node[:tomcat][:checksum]
-  version node[:tomcat][:version]
+  version node[:tomcat][:base_version]
   prefix_root node[:tomcat][:prefix_dir]
-  home_dir node[:tomcat][:home_dir]
+  home_dir node[:tomcat][:home]
   owner node[:tomcat][:user]
   group node[:tomcat][:group]
 end
 
 # Tomcat main configuration file
-case node[:tomcat][:version]
+case node[:tomcat][:base_version]
 when '5', '55'
   server_template = "server5.xml.erb"
 else
   server_template = "server.xml.erb"
 end
 
-template "#{node[:tomcat][:conf_dir]}/server.xml" do
+template "#{node[:tomcat][:config_dir]}/server.xml" do
   source server_template
   mode 00664
-  variables(
-    :ajp_port => node[:tomcat][:ajp_port],
-    :ajp_redirect_port => node[:tomcat][:ajp_redirect_port],
-    :ajp_connection_timeout => node[:tomcat][:ajp_connection_timeout],
-    :ajp_max_threads => node[:tomcat][:ajp_max_threads],
-    :http_port => node[:tomcat][:http_port],
-    :http_redirect_port => node[:tomcat][:http_redirect_port],
-    :http_connection_timeout => node[:tomcat][:http_connection_timeout],
-    :http_max_threads => node[:tomcat][:http_max_threads],
-    :http_uri_encoding => node[:tomcat][:http_uri_encoding],
-    :tomcat_version => node[:tomcat][:version].to_i
-  )
   notifies :restart, "service[#{node[:tomcat][:service]}]"
 end
 
@@ -70,13 +58,13 @@ template node[:tomcat][:service] do
   variables(
     :tomcat_service => node[:tomcat][:service],
     :tomcat_user => node[:tomcat][:user],
-    :catalina_base => node[:tomcat][:base_dir],
-    :catalina_home => node[:tomcat][:home_dir],
-    :catalina_opts => node[:tomcat][:catalina_opts],
+    :catalina_base => node[:tomcat][:base],
+    :catalina_home => node[:tomcat][:home],
+    :catalina_opts => node[:tomcat][:catalina_options],
     :catalina_pid => node[:tomcat][:pid_dir] + '/' + node[:tomcat][:service],
     :catalina_tmp => node[:tomcat][:tmp_dir],
     :java_home => node[:java][:java_home],
-    :java_opts => node[:tomcat][:java_opts],
+    :java_opts => node[:tomcat][:java_options],
     :tomcat_lock => node[:tomcat][:lock_dir] + '/' + node[:tomcat][:service]
   )
 end
