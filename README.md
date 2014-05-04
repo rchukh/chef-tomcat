@@ -26,11 +26,11 @@ The purpose of this - for now - is to address the simple fact that the more popu
 include_recipe 'tomcat::default'
 ```
 
-### Tomcat 5.5 with OpenJDK 6
+### Tomcat 6 with OpenJDK 6
 ```ruby
 # attribute space
 include_attribute 'tomcat'
-node[:tomcat][:version] = '55'
+node[:tomcat][:version] = '6'
 
 # recipe space
 include_recipe 'tomcat::default'
